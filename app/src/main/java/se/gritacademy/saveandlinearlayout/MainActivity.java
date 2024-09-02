@@ -18,31 +18,36 @@ public class MainActivity extends AppCompatActivity {
     TextView tv;
     EditText et;
     Button btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-            SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferance), this.MODE_PRIVATE);
-            SharedPreferences.Editor editor=sharedPref.edit();
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferance), this.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-            Log.d("alrik",sharedPref.getString("Key","default text if null"));
+        Log.d("alrik", sharedPref.getString("Key", "default text if null"));
 
 
         tv = findViewById(R.id.text);
         et = findViewById(R.id.editTextText);
         btn = findViewById(R.id.button);
         //när man startar appen så sätter textVeiwn texten från sharedpref
-        tv.setText(sharedPref.getString("Key","[no text found]"));
+        tv.setText(sharedPref.getString("Key", "[no text found]"));
 
-        btn.setOnClickListener((e)->{
-            String inputtedText= et.getText().toString();
-            editor.putString("Key",inputtedText ).apply();
-            Toast.makeText(MainActivity.this,"saved",Toast.LENGTH_SHORT).show();
+        btn.setOnClickListener((e) -> {
+            String inputtedText = et.getText().toString();
+
+            if (inputtedText != "")
+                editor.putString("Key", inputtedText).apply();
+            else
+                editor.remove("Key");
+
+            Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
             tv.setText(inputtedText);
         });
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
