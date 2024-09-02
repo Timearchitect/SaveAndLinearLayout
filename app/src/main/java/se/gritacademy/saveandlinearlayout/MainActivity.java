@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv;
     EditText et;
     Button btn;
-
+    SharedPreferences sharedPref ;
     @Override
     protected void onRestoreInstanceState( Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("Key2","test2");
+        outState.putString("Key2","+66");
         Log.d("alrik", "onSaveInstanceState: SAVE");
     }
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preferance), this.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences(getString(R.string.preferance), this.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         Log.d("alrik", sharedPref.getString("Key", "default text if null"));
@@ -56,16 +56,18 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener((e) -> {
             String inputtedText = et.getText().toString();
 
-            if (inputtedText == "R") {
+            if (inputtedText.equals("")) {
                 editor.remove("Key");
                 editor.apply();
             } else {
                 editor.putString("Key", inputtedText).apply();
-                tv.setText(inputtedText);
+                //tv.setText(inputtedText);
+                tv.setText(sharedPref.getString("Key", "[no text found]"));
                 Toast.makeText(MainActivity.this, "saved:" + inputtedText, Toast.LENGTH_SHORT).show();
             }
 
             });
+        tv.setText(sharedPref.getString("Key", "[no text found]"));
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
